@@ -10,3 +10,4 @@ public interface Dao {
 
 	public Employee getEmployee(int employeeId, String password);
 }
+
