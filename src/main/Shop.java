@@ -7,6 +7,7 @@ import model.Client;
 import model.Employee;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -543,10 +544,27 @@ public class Shop {
 			return;
 		}
 		inventory.add(product);
+		writeInventory(product);
 		numberProducts++;
 	}
 	
-	
+	public void writeInventory(Product product) {
+		File f = new File(System.getProperty("user.dir") + File.separator + "files/inputInventory.txt");
+		try {			
+			FileWriter fw = new FileWriter(f, true);				
+			BufferedWriter bw = new BufferedWriter(fw);
+			PrintWriter pw = new PrintWriter(fw);
+			
+			String texto = "Product" + product.getName() + ";Wholesaler Price:" + product.getWholesalerPrice() + ";Stock:" + product.getStock() + ";";
+			bw.write(texto);
+			fw.write("\n");
+			
+			bw.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+		
+	}
 
 	/**
 	 * check if inventory is full or not
