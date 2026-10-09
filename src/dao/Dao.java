@@ -15,6 +15,6 @@ public interface Dao {
 	
 	public ArrayList<Product> getInventory();
 	
-	public ArrayList<Product> writeInventory(ArrayList<Product> inventory);
+	public ArrayList<Product> writeInventory(ArrayList<Product> inventory); //por hacer
 }
 

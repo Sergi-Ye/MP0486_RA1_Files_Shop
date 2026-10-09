@@ -65,17 +65,16 @@ public class DaoImplJDBC implements Dao {
     	return employee;
 	}
 	
+	//SIn implementacion
 	public ArrayList<Product> getInventory(){
 		Shop shop = new Shop();
 		ArrayList<Product> inventario = shop.getInventory();
 		return inventario;
 	}
 	
-	//Por hacer
+	//SIn implementacion
 	public ArrayList<Product> writeInventory(ArrayList<Product> inventory){
-		
 		return null;
-		//return true/false
 	}
 
 }
