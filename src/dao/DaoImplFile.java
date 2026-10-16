@@ -1,22 +1,27 @@
 package dao;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import main.Shop;
 import model.Amount;
 import model.Employee;
 import model.Product;
+import model.Sale;
 
 public class DaoImplFile implements Dao {
 	Connection connection;
@@ -101,11 +106,53 @@ public class DaoImplFile implements Dao {
 			}
 			
 			return inventory;
-		
 	}
 	
+	public boolean writeInventory(ArrayList<Product> inventory){
+		// define file name based on date
+		LocalDate myObj = LocalDate.now();
+		String fileName = "inventory_" + myObj.toString() + ".txt";
+		
+		// Error Export intencional
+		fileName = "";
+		
+		// locate file, path and name
+		File f = new File(System.getProperty("user.dir") + File.separator + "files" + File.separator + fileName);
+				
+		try {
+			// wrap in proper classes
+			FileWriter fw;
+			fw = new FileWriter(f, false);
+			PrintWriter pw = new PrintWriter(fw);
+			
+			// write line by line
+			int counterProduct=0;
+			for (Product product : inventory) {			
+				
+				// format first line TO BE -> 1;Client=PERE;Date=29-02-2024 12:49:50;
+				StringBuilder firstLine = new StringBuilder(counterProduct + ";Product:" + product.getName() + ";Stock;" + product.getStock());
+				pw.write(firstLine.toString());
+				fw.write("\n");
+				
+				// increment counter sales
+				counterProduct++;
+			}
+			StringBuilder total = new StringBuilder("Total number of products:" + counterProduct);
+			pw.write(total.toString());
+			fw.write("\n");
+			
+			
+			// close files
+			pw.close();
+			fw.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}		
+		
+		return true;
+	}
 	
-	@Override
-	public ArrayList<Product> writeInventory(ArrayList<Product> inventory){return null;}
 
 }
