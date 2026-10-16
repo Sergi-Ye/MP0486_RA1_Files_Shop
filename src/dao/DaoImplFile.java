@@ -114,7 +114,7 @@ public class DaoImplFile implements Dao {
 		String fileName = "inventory_" + myObj.toString() + ".txt";
 		
 		// Error Export intencional
-		fileName = "";
+		//fileName = "";
 		
 		// locate file, path and name
 		File f = new File(System.getProperty("user.dir") + File.separator + "files" + File.separator + fileName);
