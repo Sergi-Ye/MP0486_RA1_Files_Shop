@@ -142,6 +142,9 @@ public class ShopView extends JFrame implements ActionListener, KeyListener{
 	@Override
 	public void keyPressed(KeyEvent e) {
 		// TODO Auto-generated method stub
+		if (e.getKeyChar() == '0' ) {
+			btnExport.doClick();	
+        }
 		if (e.getKeyChar() == '1' ) {
 			this.openCashView();	
         }
