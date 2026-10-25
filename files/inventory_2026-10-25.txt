@@ -1,3 +1,4 @@
-0;Product:Manzana;Stock;10
-1;Product:Fresa;Stock;20
-Total number of products:2
+1;Product:Manzana;Stock:10;
+2;Product:Fresa;Stock:20;
+3;Product:Sus;Stock:67;
+Total number of products:3;

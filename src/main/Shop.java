@@ -29,7 +29,7 @@ public class Shop {
 //	private Sale[] sales;
 	private ArrayList<Sale> sales;
 	private int numberSales;
-	private Dao dao;
+	private DaoImplFile dao;
 
 	final static double TAX_RATE = 1.04;
 
