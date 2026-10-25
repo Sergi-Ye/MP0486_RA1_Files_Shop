@@ -37,6 +37,7 @@ public class Shop {
 		inventory = new ArrayList<Product>();
 		sales = new ArrayList<Sale>();
 		dao = new DaoImplFile();
+		
 	}
 	
 	
@@ -106,6 +107,7 @@ public class Shop {
 
 		// load inventory from external data
 		shop.loadInventory();
+		
 		
 		// init session as employee
 		shop.initSession();
@@ -220,11 +222,12 @@ public class Shop {
 	 */
 	private void readInventory() {	
 		inventory = dao.getInventory();
-	/*	
+	/*
 		for(Product inv: inventory) {
 			System.out.println(inv.toString());
 		}
-	*/
+	*/	
+
 	}
 
 	/**

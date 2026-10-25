@@ -113,7 +113,7 @@ public class DaoImplFile implements Dao {
 		LocalDate myObj = LocalDate.now();
 		String fileName = "inventory_" + myObj.toString() + ".txt";
 		
-		// Error Export intencional
+		// Error Export intentional
 		//fileName = "";
 		
 		// locate file, path and name
