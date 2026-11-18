@@ -1,16 +1,22 @@
 package dao;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import main.Shop;
 import model.Employee;
 import model.Product;
+import model.Sale;
 
 public class DaoImplJDBC implements Dao {
 	Connection connection;
@@ -65,17 +71,9 @@ public class DaoImplJDBC implements Dao {
     	return employee;
 	}
 	
-	public ArrayList<Product> getInventory(){
-		Shop shop = new Shop();
-		ArrayList<Product> inventario = shop.getInventory();
-		return inventario;
-	}
+
+	public ArrayList<Product> getInventory(){return null;}
 	
-	//Por hacer
-	public ArrayList<Product> writeInventory(ArrayList<Product> inventory){
-		
-		return null;
-		//return true/false
-	}
+	public boolean writeInventory(ArrayList<Product> inventory){return false;}
 
 }

@@ -18,6 +18,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import dao.Dao;
+import dao.DaoImplFile;
+
 public class Shop {
 	private Amount cash = new Amount(100.00);
 //	private Product[] inventory;
@@ -26,12 +29,15 @@ public class Shop {
 //	private Sale[] sales;
 	private ArrayList<Sale> sales;
 	private int numberSales;
+	private DaoImplFile dao;
 
 	final static double TAX_RATE = 1.04;
 
 	public Shop() {
 		inventory = new ArrayList<Product>();
 		sales = new ArrayList<Sale>();
+		dao = new DaoImplFile();
+		
 	}
 	
 	
@@ -101,6 +107,7 @@ public class Shop {
 
 		// load inventory from external data
 		shop.loadInventory();
+		
 		
 		// init session as employee
 		shop.initSession();
@@ -213,70 +220,14 @@ public class Shop {
 	/**
 	 * read inventory from file
 	 */
-	private void readInventory() {
-		// locate file, path and name
-		File f = new File(System.getProperty("user.dir") + File.separator + "files/inputInventory.txt");
-		
-		try {			
-			// wrap in proper classes
-			FileReader fr;
-			fr = new FileReader(f);				
-			BufferedReader br = new BufferedReader(fr);
-			
-			// read first line
-			String line = br.readLine();
-			
-			// process and read next line until end of file
-			while (line != null) {
-				// split in sections
-				String[] sections = line.split(";");
-				
-				String name = "";
-				double wholesalerPrice=0.0;
-				int stock = 0;
-				
-				// read each sections
-				for (int i = 0; i < sections.length; i++) {
-					// split data in key(0) and value(1) 
-					String[] data = sections[i].split(":");
-					
-					switch (i) {
-					case 0:
-						// format product name
-						name = data[1];
-						break;
-						
-					case 1:
-						// format price
-						wholesalerPrice = Double.parseDouble(data[1]);
-						break;
-						
-					case 2:
-						// format stock
-						stock = Integer.parseInt(data[1]);
-						break;
-						
-					default:
-						break;
-					}
-				}
-				// add product to inventory
-				addProduct(new Product(name, new Amount(wholesalerPrice), true, stock));
-				
-				// read next line
-				line = br.readLine();
-			}
-			fr.close();
-			br.close();
-			
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private void readInventory() {	
+		inventory = dao.getInventory();
+	/*
+		for(Product inv: inventory) {
+			System.out.println(inv.toString());
 		}
+	*/	
+
 	}
 
 	/**
@@ -544,26 +495,12 @@ public class Shop {
 			return;
 		}
 		inventory.add(product);
-		writeInventory(product);
 		numberProducts++;
 	}
 	
-	public void writeInventory(Product product) {
-		File f = new File(System.getProperty("user.dir") + File.separator + "files/inputInventory.txt");
-		try {			
-			FileWriter fw = new FileWriter(f, true);				
-			BufferedWriter bw = new BufferedWriter(fw);
-			PrintWriter pw = new PrintWriter(fw);
-			
-			String texto = "Product" + product.getName() + ";Wholesaler Price:" + product.getWholesalerPrice() + ";Stock:" + product.getStock() + ";";
-			bw.write(texto);
-			fw.write("\n");
-			
-			bw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}	
-		
+	public boolean writeInventory() {
+		boolean write = dao.writeInventory(inventory);
+		return write;
 	}
 
 	/**
@@ -575,7 +512,6 @@ public class Shop {
 		} else {
 			return false;
 		}
-
 	}
 
 	/**
