@@ -72,7 +72,51 @@ public class DaoImplJDBC implements Dao {
 	}
 	
 
-	public ArrayList<Product> getInventory(){return null;}
+
+	@Override
+	public ArrayList<Product> getInventory() {
+	
+	    ArrayList<Product> inventory = new ArrayList<>();
+	
+	    String query = "SELECT * FROM inventory";
+	
+	    try (PreparedStatement ps = connection.prepareStatement(query);
+	         ResultSet rs = ps.executeQuery()) {
+	
+	        int maxId = 0;
+	
+	        while (rs.next()) {
+	
+	            int id = rs.getInt("id");
+	            String name = rs.getString("name");
+	            double wholesalerPrice = rs.getDouble("wholesalerPrice");
+	            boolean available = rs.getBoolean("available");
+	            int stock = rs.getInt("stock");
+	
+	            Product product = new Product(
+	                name,
+	                new model.Amount(wholesalerPrice),
+	                available,
+	                stock
+	            );
+	
+	            product.setId(id);
+	
+	            inventory.add(product);
+	
+	            maxId = Math.max(maxId, id);
+	        }
+	
+	        Product.setTotalProducts(
+	            Math.max(Product.getTotalProducts(), maxId)
+	        );
+	
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return inventory;
+	}
+
 	
 	public boolean writeInventory(ArrayList<Product> inventory){return false;}
 
