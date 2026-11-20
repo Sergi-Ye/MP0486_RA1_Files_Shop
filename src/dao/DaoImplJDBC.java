@@ -49,6 +49,38 @@ public class DaoImplJDBC implements Dao {
 		}
 		
 	}
+	
+	
+	// Create table Inventory
+	public void createInventoryTable() {
+	
+	    String createTable = "CREATE TABLE IF NOT EXISTS inventory ("
+	            + "id INT AUTO_INCREMENT PRIMARY KEY, "
+	            + "name VARCHAR(100) NOT NULL, "
+	            + "wholesalerPrice DECIMAL(10,2) NOT NULL, "
+	            + "available BOOLEAN NOT NULL, "
+	            + "stock INT NOT NULL"
+	            + ")";
+	
+	    String insertProducts = "INSERT IGNORE INTO inventory "
+	            + "(id, name, wholesalerPrice, available, stock) VALUES "
+	            + "(1, 'Manzana', 10.00, TRUE, 10), "
+	            + "(2, 'Fresa', 5.00, TRUE, 20)";
+	
+	    try (Statement statement = connection.createStatement()) {
+	
+	        // Crear tabla
+	        statement.executeUpdate(createTable);
+	        // Insertar productos iniciales
+	        statement.executeUpdate(insertProducts);
+	
+	        System.out.println("Tabla inventory preparada correctamente.");
+	
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	}
+
 
 	@Override
 	public Employee getEmployee(int employeeId, String password) {
