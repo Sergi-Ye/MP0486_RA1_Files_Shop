@@ -155,6 +155,13 @@ public class DaoImplFile implements Dao {
 		return true;
 	}
 	
-	
+	@Override
+	public void addProduct(Product product) {}
+
+	@Override
+	public void updateProduct(Product product) {}
+
+	@Override
+	public void deleteProduct(int productId) {}
 
 }
