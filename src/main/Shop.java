@@ -206,6 +206,7 @@ public class Shop {
 	 */
 	private void readInventory() {	
 		inventory = dao.getInventory();
+		numberProducts = inventory.size();
 	/*
 		for(Product inv: inventory) {
 			System.out.println(inv.toString());
@@ -256,10 +257,14 @@ public class Shop {
 		if (product != null) {
 			// remove it
 			if (inventory.remove(product)) {
-				System.out.println("El producto " + name + " ha sido eliminado");
+
+			    deleteProduct(product.getId());
+			    numberProducts--;
+
+			    System.out.println("El producto " + name + " ha sido eliminado");
 
 			} else {
-				System.out.println("No se ha encontrado el producto con nombre " + name);
+			    System.out.println("No se ha encontrado el producto con nombre " + name);
 			}
 		} else {
 			System.out.println("No se ha encontrado el producto con nombre " + name);
@@ -497,6 +502,13 @@ public class Shop {
 
 	    // Update product in database
 	    dao.updateProduct(product);
+
+	}
+	
+	public void deleteProduct(int productId) {
+
+	    // Delete product from database
+	    dao.deleteProduct(productId);
 
 	}
 
