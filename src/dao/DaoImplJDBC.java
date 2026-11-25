@@ -234,10 +234,36 @@ public class DaoImplJDBC implements Dao {
 	    }
 	}
 
-
 	@Override
 	public void updateProduct(Product product) {
-		System.out.println("Error al exportar el inventario.");
+	
+	    String query = "UPDATE inventory SET "
+	            + "name = ?, "
+	            + "wholesalerPrice = ?, "
+	            + "available = ?, "
+	            + "stock = ? "
+	            + "WHERE id = ?";
+	
+	    try (PreparedStatement ps = connection.prepareStatement(query)) {
+	
+	        ps.setString(1, product.getName());
+	        ps.setDouble(2, product.getWholesalerPrice().getValue());
+	        ps.setBoolean(3, product.isAvailable());
+	        ps.setInt(4, product.getStock());
+	        ps.setInt(5, product.getId());
+	
+	        int rows = ps.executeUpdate();
+	
+	        if (rows > 0) {
+	            System.out.println("Producto actualizado correctamente.");
+	        } else {
+	            System.out.println("No se ha encontrado el producto.");
+	        }
+	
+	    } catch (SQLException e) {
+	        System.out.println("Error al actualizar el producto.");
+	        e.printStackTrace();
+	    }
 	}
 
 	@Override
