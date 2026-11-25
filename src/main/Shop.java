@@ -40,7 +40,7 @@ public class Shop {
 	    // DB connection and table/insert creation(if not exists)
 	    dao = new DaoImplJDBC();
 	    dao.connect();
-	    dao.createInventoryTable();
+	    dao.createDatabaseTables();
 	}
 	
 

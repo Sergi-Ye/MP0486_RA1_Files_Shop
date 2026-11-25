@@ -50,10 +50,9 @@ public class DaoImplJDBC implements Dao {
 		
 	}
 	
-	
-	// Create table Inventory
-	public void createInventoryTable() {
-	
+	// Create tables Inventory and Historical Inventory
+	public void createDatabaseTables() {
+
 	    String createTable = "CREATE TABLE IF NOT EXISTS inventory ("
 	            + "id INT AUTO_INCREMENT PRIMARY KEY, "
 	            + "name VARCHAR(100) NOT NULL, "
@@ -61,25 +60,40 @@ public class DaoImplJDBC implements Dao {
 	            + "available BOOLEAN NOT NULL, "
 	            + "stock INT NOT NULL"
 	            + ")";
-	
+
+	    String createHistoricalTable = "CREATE TABLE IF NOT EXISTS historical_inventory ("
+	            + "id INT AUTO_INCREMENT PRIMARY KEY, "
+	            + "id_product INT NOT NULL, "
+	            + "name VARCHAR(100) NOT NULL, "
+	            + "wholesalerPrice DECIMAL(10,2) NOT NULL, "
+	            + "available BOOLEAN NOT NULL, "
+	            + "stock INT NOT NULL, "
+	            + "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP"
+	            + ")";
+
 	    String insertProducts = "INSERT IGNORE INTO inventory "
 	            + "(id, name, wholesalerPrice, available, stock) VALUES "
 	            + "(1, 'Manzana', 10.00, TRUE, 10), "
 	            + "(2, 'Fresa', 5.00, TRUE, 20)";
-	
+
 	    try (Statement statement = connection.createStatement()) {
-	
-	        // Crear tabla
+
+	        // Crear tabla inventory
 	        statement.executeUpdate(createTable);
+
+	        // Crear tabla historical_inventory
+	        statement.executeUpdate(createHistoricalTable);
+
 	        // Insertar productos iniciales
 	        statement.executeUpdate(insertProducts);
-	
-	        System.out.println("Tabla inventory preparada correctamente.");
-	
+
+	        System.out.println("Tablas inventory e historical_inventory preparadas correctamente.");
+
 	    } catch (SQLException e) {
 	        e.printStackTrace();
 	    }
 	}
+
 
 
 	@Override
@@ -149,7 +163,55 @@ public class DaoImplJDBC implements Dao {
 	    return inventory;
 	}
 
+	@Override
+	public boolean writeInventory(ArrayList<Product> inventory) {
 	
-	public boolean writeInventory(ArrayList<Product> inventory){return false;}
+	    String query = "INSERT INTO historical_inventory "
+	            + "(id_product, name, wholesalerPrice, available, stock) "
+	            + "VALUES (?, ?, ?, ?, ?)";
+	
+	    try (PreparedStatement ps = connection.prepareStatement(query)) {
+	
+	        for (Product product : inventory) {
+	
+	            ps.setInt(1, product.getId());
+	            ps.setString(2, product.getName());
+	            ps.setDouble(3, product.getWholesalerPrice().getValue());
+	            ps.setBoolean(4, product.isAvailable());
+	            ps.setInt(5, product.getStock());
+	
+	            ps.addBatch();
+	        }
+	
+	        ps.executeBatch();
+	
+	        System.out.println("Inventario exportado correctamente.");
+	        return true;
+	
+	    } catch (SQLException e) {
+	
+	        System.out.println("Error al exportar el inventario.");
+	        e.printStackTrace();
+	
+	        return false;
+	    }
+	}
+	
+	
+	@Override
+	public void addProduct(Product product) {
+		System.out.println("Error al exportar el inventario.");
+	}
 
+	@Override
+	public void updateProduct(Product product) {
+		System.out.println("Error al exportar el inventario.");
+	}
+
+	@Override
+	public void deleteProduct(int productId) {
+		System.out.println("Error al exportar el inventario.");
+	}
+
+	
 }
