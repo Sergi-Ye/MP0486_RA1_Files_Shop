@@ -196,12 +196,44 @@ public class DaoImplJDBC implements Dao {
 	        return false;
 	    }
 	}
-	
-	
+
+
 	@Override
 	public void addProduct(Product product) {
-		System.out.println("Error al exportar el inventario.");
+	
+	    String query = "INSERT INTO inventory "
+	            + "(name, wholesalerPrice, available, stock) "
+	            + "VALUES (?, ?, ?, ?)";
+	
+	    try (PreparedStatement ps = connection.prepareStatement(
+	            query, Statement.RETURN_GENERATED_KEYS)) {
+	
+	        ps.setString(1, product.getName());
+	        ps.setDouble(2, product.getWholesalerPrice().getValue());
+	        ps.setBoolean(3, product.isAvailable());
+	        ps.setInt(4, product.getStock());
+	
+	        ps.executeUpdate();
+	
+	        // Recuperar el ID generado por MySQL
+	        try (ResultSet rs = ps.getGeneratedKeys()) {
+	            if (rs.next()) {
+	                product.setId(rs.getInt(1));
+	            }
+	        }
+	
+	        Product.setTotalProducts(
+	                Math.max(Product.getTotalProducts(), product.getId())
+	        );
+	
+	        System.out.println("Producto añadido correctamente.");
+	
+	    } catch (SQLException e) {
+	        System.out.println("Error al añadir el producto.");
+	        e.printStackTrace();
+	    }
 	}
+
 
 	@Override
 	public void updateProduct(Product product) {
