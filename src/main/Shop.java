@@ -281,6 +281,10 @@ public class Shop {
 			int stock = scanner.nextInt();
 			// update stock product
 			product.setStock(product.getStock() + stock);
+			
+			//update DB :)
+			updateProduct(product);
+			
 			System.out.println("El stock del producto " + name + " ha sido actualizado a " + product.getStock());
 
 		} else {
@@ -487,6 +491,13 @@ public class Shop {
 	    // Add product to inventory
 	    inventory.add(product);
 	    numberProducts++;
+	}
+	
+	public void updateProduct(Product product) {
+
+	    // Update product in database
+	    dao.updateProduct(product);
+
 	}
 
 	
