@@ -268,8 +268,27 @@ public class DaoImplJDBC implements Dao {
 
 	@Override
 	public void deleteProduct(int productId) {
-		System.out.println("Error al exportar el inventario.");
+	
+	    String query = "DELETE FROM inventory WHERE id = ?";
+	
+	    try (PreparedStatement ps = connection.prepareStatement(query)) {
+	
+	        ps.setInt(1, productId);
+	
+	        int rows = ps.executeUpdate();
+	
+	        if (rows > 0) {
+	            System.out.println("Producto eliminado correctamente.");
+	        } else {
+	            System.out.println("No se ha encontrado el producto.");
+	        }
+	
+	    } catch (SQLException e) {
+	        System.out.println("Error al eliminar el producto.");
+	        e.printStackTrace();
+	    }
 	}
+
 
 	
 }
